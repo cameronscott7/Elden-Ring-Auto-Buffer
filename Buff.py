@@ -1,34 +1,39 @@
-
-#break class into a weapons buff, and a usable buff classes, (top 10 boxes and lower 10 boxes)
-#need variable for if weapon is one handed or two handed (one or two weapons)
-#also need times it takes to do buff.
 class Buff:
-    def __init__(self, name="Placeholder", FP=0, damage=0, damageType="None", buffType="None", statusBuildup=0):
+    def __init__(self, name="Placeholder", priority=99, FP=0, damage=0, damageType="None", buffType="None", statusBuildup=0,
+                 buffTime=0.00):
         #Buff Types: Weapon, Shield, Body, Aura, Health Regen, Stamina Regen, Fall Damage, Dodge Roll, Unique
         self.name = name
+        self.priority=priority
         self.FP = FP
         self.damage = damage
         self.damageType = damageType
         self.buffType = buffType
         self.statusBuildup = statusBuildup
+        self.buffTime = buffTime
     
-    def get_name(self):
+    def getName(self):
         return self.name
+    
+    def getPriority(self):
+        return self.priority
 
-    def get_FP(self):
+    def getFP(self):
         return self.FP
 
-    def get_damage(self):
+    def getDamage(self):
         return self.damage
 
-    def get_damageType(self):
+    def getDamageType(self):
         return self.damageType
 
-    def get_buffType(self):
+    def getBuffType(self):
         return self.buffType
 
-    def get_statusBuildup(self):
+    def getStatusBuildup(self):
         return self.statusBuildup
+    
+    def getBuffTime(self):
+        return self.buffTime
     
     
     
