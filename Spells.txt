@@ -1,0 +1,2 @@
+# Weapons Document, Edit priorities to change buff order or update values as needed. 
+# (Priorities are applied accros Usables.txt, AshesOfWar.txt, and Spells.txt)

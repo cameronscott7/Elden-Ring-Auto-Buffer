@@ -15,10 +15,13 @@ class Player:
     def getFP(self):
         return self.FP
     
+    def getMaxFP(self):
+        return self.maxFP
+    
     def getHealth(self):
         return self.health
     
-    def getnumFPFlasks(self):
+    def getNumFPFlasks(self):
         return self.numFPFlasks
     
     def getFlaskLevel(self):

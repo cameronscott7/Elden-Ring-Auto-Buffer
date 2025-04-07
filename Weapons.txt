@@ -1,0 +1,8 @@
+# Weapons Document, Edit priorities to change buff order or update values as needed. 
+# (Priorities are applied accros Usables.txt, AshesOfWar.txt, and Spells.txt)
+
+Name: Golden Vow (Ash of War)
+Type: Ash of War
+
+Name: Staff
+Type: Medium

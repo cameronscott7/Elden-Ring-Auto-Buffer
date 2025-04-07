@@ -7,6 +7,8 @@ from Usable import Usable
 from Spell import Spell
 from Player import Player
 from BuffSelector import BuffSelector
+import tkinter.messagebox as messagebox
+
 
 #TODO
 #add manual mode where user can specify the order the buffs should be applied in.
@@ -14,6 +16,7 @@ from BuffSelector import BuffSelector
 #Add in file to read in all buffs for user to add new weapons if they want.
 #NEED TO ADD SPELLS SECTION ASWELL
 #IF WANTING TO USE SPELLS OR INCANTATIONS, MUST CHECK FOR IS USER HAS A seal or staff equipped.
+#ADD CHECKBOXES FOR CHECKING IF WEAPON IS ONE HANDED OR TWO HANDED
 class App(customtkinter.CTk):
     def __init__(self):
         super().__init__()
@@ -24,17 +27,32 @@ class App(customtkinter.CTk):
         self.title("Combo Box Layout")
         self.mainLabel = customtkinter.CTkLabel(self, text="Elden Ring Auto Buffer", font=("Arial", 20),
             anchor="w")
-        self.mainLabel.pack(side="left", expand=True, fill="x", padx=(5, 0))
+        self.mainLabel.grid(row=0, column=0, padx=10, pady=5)
 
-        #TODO
-        #MAKE A NEW METHOD FOR THIS
+        self.row1Frame = customtkinter.CTkFrame(self)
+        self.row1Frame.grid(row=1, column=0, padx=20, pady=5, sticky="nsw")
+
+        self.row2Frame = customtkinter.CTkFrame(self)
+        self.row2Frame.grid(row=2, column=0, padx=20, pady=5, sticky="nsw")
+
+        self.row3Frame = customtkinter.CTkFrame(self)
+        self.row3Frame.grid(row=3, column=0, padx=20, pady=5, sticky="nsw")
+
+        self.initializeBuffs()
+
+        self.createWeaponCombos(self.row1Frame)
+        self.createUsableCombos(self.row2Frame)
+        self.createSpellsCombos(self.row3Frame)
+        self.createRightFrame(self.row1Frame)
+
+    def initializeBuffs(self):
         self.weaponsDict = {
-            "Golden Vow (Ash of War)": Weapon("Golden Vow", AshOfWar),
-            "Staff": Weapon("Staff", Spell),
+            "Golden Vow (Ash of War)": Weapon("Golden Vow (Ash of War)", AshOfWar),
+            "Staff": Weapon("Staff", "Medium"),
         }
 
         self.ashesOfWarDict = {
-            "Golden Vow (Ash of War)": AshOfWar("Golden Vow (Ash of War)", 3, 20, 10, "None", "Body", 0, 0.00, True, True),
+            "Golden Vow (Ash of War)": AshOfWar("Golden Vow (Ash of War)", 0, 20, 10, "None", "Body", 0, 0.00, True, True),
         }
 
         self.usablesDict = {
@@ -44,11 +62,6 @@ class App(customtkinter.CTk):
         self.spellsDict = {
             "Terra Magica": Spell("Flask of Wondrous Physick", 2, 50, 10, "None", "Area", 0, 0.00, True, True),
         }
-
-        self.createWeaponCombos()
-        self.createUsableCombos()
-        self.createSpellsCombos()
-        self.createRightFrame()
 
     def addLableEntry(self, parent, labelText):
         self.frame = customtkinter.CTkFrame(parent)
@@ -62,9 +75,9 @@ class App(customtkinter.CTk):
 
         return entry
         
-    def createRightFrame(self):
-        self.rightFrame = customtkinter.CTkFrame(self)
-        self.rightFrame.pack(side="left", expand=True, fill="x", padx=(5, 0))
+    def createRightFrame(self, parent):
+        self.rightFrame = customtkinter.CTkFrame(parent)
+        self.rightFrame.pack(side="left", expand=True, fill="x", padx=(20, 0))
 
         # Create the submit button on the right
 
@@ -75,138 +88,160 @@ class App(customtkinter.CTk):
         self.submitButton = customtkinter.CTkButton(self.rightFrame, text="Submit", command=self.submitAction)
         self.submitButton.pack(side="left")
 
-    def createWeaponCombos(self):
-        buffNames=list(self.weaponsDict.keys())
+    def createWeaponCombos(self, parent):
+        buffNames = list(self.weaponsDict.keys())
 
-        # Create a frame for the combo boxes on the left
-        self.weaponFrame = customtkinter.CTkFrame(self)
-        self.weaponFrame.grid(row=1, column=0, padx=20, pady=20, sticky="w", columnspan=3)
+        # Main frame holding everything
+        self.weaponFrame = customtkinter.CTkFrame(parent)
+        self.weaponFrame.pack(side="left", expand=True, fill="x", padx=(5, 0))
 
-        # Create 3 combo boxes on the top
-        self.weapon1 = customtkinter.CTkComboBox(self.weaponFrame, values=buffNames, state="readonly")
-        self.weapon1.grid(row=0, column=0, padx=10, pady=10)
+        # Row 1 frame
+        row1 = customtkinter.CTkFrame(self.weaponFrame)
+        row1.pack(fill="x", pady=5)
+
+        self.weapon1 = customtkinter.CTkComboBox(row1, values=buffNames, state="readonly")
+        self.weapon1.pack(side="left", padx=10, pady=5)
         self.weapon1.set("Empty")
 
-        self.weapon2 = customtkinter.CTkComboBox(self.weaponFrame, values=buffNames, state="readonly")
-        self.weapon2.grid(row=0, column=1, padx=10, pady=10)
+        self.weapon2 = customtkinter.CTkComboBox(row1, values=buffNames, state="readonly")
+        self.weapon2.pack(side="left", padx=10, pady=5)
         self.weapon2.set("Empty")
 
-        self.weapon3 = customtkinter.CTkComboBox(self.weaponFrame, values=buffNames, state="readonly")
-        self.weapon3.grid(row=0, column=2, padx=10, pady=10)
+        self.weapon3 = customtkinter.CTkComboBox(row1, values=buffNames, state="readonly")
+        self.weapon3.pack(side="left", padx=10, pady=5)
         self.weapon3.set("Empty")
 
-        self.weapon4 = customtkinter.CTkComboBox(self.weaponFrame, values=buffNames, state="readonly")
-        self.weapon4.grid(row=1, column=0, padx=10, pady=10)
+        # Row 2 frame
+        row2 = customtkinter.CTkFrame(self.weaponFrame)
+        row2.pack(fill="x", pady=5)
+
+        self.weapon4 = customtkinter.CTkComboBox(row2, values=buffNames, state="readonly")
+        self.weapon4.pack(side="left", padx=10, pady=5)
         self.weapon4.set("Empty")
 
-        self.weapon5 = customtkinter.CTkComboBox(self.weaponFrame, values=buffNames, state="readonly")
-        self.weapon5.grid(row=1, column=1, padx=10, pady=10)
+        self.weapon5 = customtkinter.CTkComboBox(row2, values=buffNames, state="readonly")
+        self.weapon5.pack(side="left", padx=10, pady=5)
         self.weapon5.set("Empty")
 
-        self.weapon6 = customtkinter.CTkComboBox(self.weaponFrame, values=buffNames, state="readonly")
-        self.weapon6.grid(row=1, column=2, padx=10, pady=10)
+        self.weapon6 = customtkinter.CTkComboBox(row2, values=buffNames, state="readonly")
+        self.weapon6.pack(side="left", padx=10, pady=5)
         self.weapon6.set("Empty")
 
+    def createUsableCombos(self, parent):
+        buffNames = list(self.usablesDict.keys())
 
-    def createUsableCombos(self):
-        buffNames=list(self.usablesDict.keys())
+        self.usableFrame = customtkinter.CTkFrame(parent)
+        self.usableFrame.pack(padx=20, pady=20, anchor="w")
 
-        self.usableFrame = customtkinter.CTkFrame(self)
-        self.usableFrame.grid(row=2, column=0, padx=20, pady=20, sticky="nsw")
+        # Row 1
+        row1 = customtkinter.CTkFrame(self.usableFrame)
+        row1.pack(fill="x")
 
-        # Create 3 combo boxes on the top
-        self.usable1 = customtkinter.CTkComboBox(self.usableFrame, values=buffNames, state="readonly")
-        self.usable1.grid(row=0, column=0, padx=10, pady=10)
+        self.usable1 = customtkinter.CTkComboBox(row1, values=buffNames, state="readonly")
+        self.usable1.pack(side="left", padx=10, pady=10)
         self.usable1.set("Empty")
 
-        self.usable2 = customtkinter.CTkComboBox(self.usableFrame, values=buffNames, state="readonly")
-        self.usable2.grid(row=0, column=1, padx=10, pady=10)
+        self.usable2 = customtkinter.CTkComboBox(row1, values=buffNames, state="readonly")
+        self.usable2.pack(side="left", padx=10, pady=10)
         self.usable2.set("Empty")
 
-        self.usable3 = customtkinter.CTkComboBox(self.usableFrame, values=buffNames, state="readonly")
-        self.usable3.grid(row=0, column=2, padx=10, pady=10)
+        self.usable3 = customtkinter.CTkComboBox(row1, values=buffNames, state="readonly")
+        self.usable3.pack(side="left", padx=10, pady=10)
         self.usable3.set("Empty")
 
-        self.usable4 = customtkinter.CTkComboBox(self.usableFrame, values=buffNames, state="readonly")
-        self.usable4.grid(row=0, column=3, padx=10, pady=10)
+        self.usable4 = customtkinter.CTkComboBox(row1, values=buffNames, state="readonly")
+        self.usable4.pack(side="left", padx=10, pady=10)
         self.usable4.set("Empty")
 
-        self.usable5 = customtkinter.CTkComboBox(self.usableFrame, values=buffNames, state="readonly")
-        self.usable5.grid(row=0, column=4, padx=10, pady=10)
+        self.usable5 = customtkinter.CTkComboBox(row1, values=buffNames, state="readonly")
+        self.usable5.pack(side="left", padx=10, pady=10)
         self.usable5.set("Empty")
 
-        self.usable6 = customtkinter.CTkComboBox(self.usableFrame, values=buffNames, state="readonly")
-        self.usable6.grid(row=1, column=0, padx=10, pady=10)
+        # Row 2
+        row2 = customtkinter.CTkFrame(self.usableFrame)
+        row2.pack(fill="x")
+
+        self.usable6 = customtkinter.CTkComboBox(row2, values=buffNames, state="readonly")
+        self.usable6.pack(side="left", padx=10, pady=10)
         self.usable6.set("Empty")
-        
-        self.usable7 = customtkinter.CTkComboBox(self.usableFrame, values=buffNames, state="readonly")
-        self.usable7.grid(row=1, column=1, padx=10, pady=10)
+
+        self.usable7 = customtkinter.CTkComboBox(row2, values=buffNames, state="readonly")
+        self.usable7.pack(side="left", padx=10, pady=10)
         self.usable7.set("Empty")
 
-        self.usable8 = customtkinter.CTkComboBox(self.usableFrame, values=buffNames, state="readonly")
-        self.usable8.grid(row=1, column=2, padx=10, pady=10)
+        self.usable8 = customtkinter.CTkComboBox(row2, values=buffNames, state="readonly")
+        self.usable8.pack(side="left", padx=10, pady=10)
         self.usable8.set("Empty")
 
-        self.usable9 = customtkinter.CTkComboBox(self.usableFrame, values=buffNames, state="readonly")
-        self.usable9.grid(row=1, column=3, padx=10, pady=10)
+        self.usable9 = customtkinter.CTkComboBox(row2, values=buffNames, state="readonly")
+        self.usable9.pack(side="left", padx=10, pady=10)
         self.usable9.set("Empty")
 
-        self.usable10 = customtkinter.CTkComboBox(self.usableFrame, values=buffNames, state="readonly")
-        self.usable10.grid(row=1, column=4, padx=10, pady=10)
+        self.usable10 = customtkinter.CTkComboBox(row2, values=buffNames, state="readonly")
+        self.usable10.pack(side="left", padx=10, pady=10)
         self.usable10.set("Empty")
 
-    def createSpellsCombos(self):
-        buffNames=list(self.spellsDict.keys())
 
-        self.spellFrame = customtkinter.CTkFrame(self)
-        self.spellFrame.grid(row=3, column=0, padx=20, pady=20)
+    def createSpellsCombos(self, parent):
+        buffNames = list(self.spellsDict.keys())
 
-        self.spell1 = customtkinter.CTkComboBox(self.spellFrame, values=buffNames, state="readonly")
-        self.spell1.grid(row=0, column=0, padx=10, pady=10)
+        self.spellFrame = customtkinter.CTkFrame(parent)
+        self.spellFrame.pack(padx=20, pady=20)
+
+        # Row 1
+        row1 = customtkinter.CTkFrame(self.spellFrame)
+        row1.pack(fill="x")
+
+        self.spell1 = customtkinter.CTkComboBox(row1, values=buffNames, state="readonly")
+        self.spell1.pack(side="left", padx=10, pady=10)
         self.spell1.set("Empty")
 
-        self.spell2 = customtkinter.CTkComboBox(self.spellFrame, values=buffNames, state="readonly")
-        self.spell2.grid(row=0, column=1, padx=10, pady=10)
+        self.spell2 = customtkinter.CTkComboBox(row1, values=buffNames, state="readonly")
+        self.spell2.pack(side="left", padx=10, pady=10)
         self.spell2.set("Empty")
 
-        self.spell3 = customtkinter.CTkComboBox(self.spellFrame, values=buffNames, state="readonly")
-        self.spell3.grid(row=0, column=2, padx=10, pady=10)
+        self.spell3 = customtkinter.CTkComboBox(row1, values=buffNames, state="readonly")
+        self.spell3.pack(side="left", padx=10, pady=10)
         self.spell3.set("Empty")
 
-        self.spell4 = customtkinter.CTkComboBox(self.spellFrame, values=buffNames, state="readonly")
-        self.spell4.grid(row=0, column=3, padx=10, pady=10)
+        self.spell4 = customtkinter.CTkComboBox(row1, values=buffNames, state="readonly")
+        self.spell4.pack(side="left", padx=10, pady=10)
         self.spell4.set("Empty")
 
-        self.spell5 = customtkinter.CTkComboBox(self.spellFrame, values=buffNames, state="readonly")
-        self.spell5.grid(row=0, column=4, padx=10, pady=10)
+        self.spell5 = customtkinter.CTkComboBox(row1, values=buffNames, state="readonly")
+        self.spell5.pack(side="left", padx=10, pady=10)
         self.spell5.set("Empty")
 
-        self.spell6 = customtkinter.CTkComboBox(self.spellFrame, values=buffNames, state="readonly")
-        self.spell6.grid(row=0, column=5, padx=10, pady=10)
+        self.spell6 = customtkinter.CTkComboBox(row1, values=buffNames, state="readonly")
+        self.spell6.pack(side="left", padx=10, pady=10)
         self.spell6.set("Empty")
-        
-        self.spell7 = customtkinter.CTkComboBox(self.spellFrame, values=buffNames, state="readonly")
-        self.spell7.grid(row=1, column=0, padx=10, pady=10)
+
+        # Row 2
+        row2 = customtkinter.CTkFrame(self.spellFrame)
+        row2.pack(fill="x")
+
+        self.spell7 = customtkinter.CTkComboBox(row2, values=buffNames, state="readonly")
+        self.spell7.pack(side="left", padx=10, pady=10)
         self.spell7.set("Empty")
 
-        self.spell8 = customtkinter.CTkComboBox(self.spellFrame, values=buffNames, state="readonly")
-        self.spell8.grid(row=1, column=1, padx=10, pady=10)
+        self.spell8 = customtkinter.CTkComboBox(row2, values=buffNames, state="readonly")
+        self.spell8.pack(side="left", padx=10, pady=10)
         self.spell8.set("Empty")
 
-        self.spell9 = customtkinter.CTkComboBox(self.spellFrame, values=buffNames, state="readonly")
-        self.spell9.grid(row=1, column=2, padx=10, pady=10)
+        self.spell9 = customtkinter.CTkComboBox(row2, values=buffNames, state="readonly")
+        self.spell9.pack(side="left", padx=10, pady=10)
         self.spell9.set("Empty")
 
-        self.spell10 = customtkinter.CTkComboBox(self.spellFrame, values=buffNames, state="readonly")
-        self.spell10.grid(row=1, column=3, padx=10, pady=10)
+        self.spell10 = customtkinter.CTkComboBox(row2, values=buffNames, state="readonly")
+        self.spell10.pack(side="left", padx=10, pady=10)
         self.spell10.set("Empty")
 
-        self.spell11 = customtkinter.CTkComboBox(self.spellFrame, values=buffNames, state="readonly")
-        self.spell11.grid(row=1, column=4, padx=10, pady=10)
+        self.spell11 = customtkinter.CTkComboBox(row2, values=buffNames, state="readonly")
+        self.spell11.pack(side="left", padx=10, pady=10)
         self.spell11.set("Empty")
 
-        self.spell12 = customtkinter.CTkComboBox(self.spellFrame, values=buffNames, state="readonly")
-        self.spell12.grid(row=1, column=5, padx=10, pady=10)
+        self.spell12 = customtkinter.CTkComboBox(row2, values=buffNames, state="readonly")
+        self.spell12.pack(side="left", padx=10, pady=10)
         self.spell12.set("Empty")
 
     def submitAction(self):
@@ -229,19 +264,46 @@ class App(customtkinter.CTk):
         filteredSpells = [item for item in spells if item != "Empty"]
         ashesOfWar = [item for item in weapons if item != "Staff"]
 
+        hasStaff = False
+        hasSeal = False
+
+        for weapon in weapons:
+            if (weapon == "Staff"):
+                hasStaff = True
+            elif (weapon == "Seal"):
+                hasSeal = True
+
         filteredAshesOfWar = [self.ashesOfWarDict[key] for key in ashesOfWar if key in self.ashesOfWarDict]
-        moreFilteredSpells = [self.spellsDict[key] for key in spells if key in self.spellsDict]
+        moreFilteredSpells = [self.spellsDict[key] for key in filteredSpells if key in self.spellsDict]
         moreFilteredUsables = [self.usablesDict[key] for key in filteredUsables if key in self.usablesDict]
+
+        sorceries = [spell for spell in moreFilteredSpells if spell.isSorcery]
+        incantations = [spell for spell in moreFilteredSpells if not spell.isSorcery]
 
         print("Selections:", filteredWeapons)
         print("Selections:", filteredUsables)
 
+        if not (hasStaff):
+            if (len(sorceries) > 0):
+                messagebox.showinfo(title="Error", message="Must Equip Staff In Order To Use A Sorcery")
+                return
+            
+        if not (hasSeal):
+            if (len(incantations) > 0):
+                messagebox.showinfo(title="Error", message="Must Equip Seal In Order To Use A Incantation")
+                return
 
-        player = Player(100, 100, 100, 0, 0, weapons, filteredAshesOfWar, moreFilteredSpells, moreFilteredUsables)
-
+        try:
+            player = Player(int(self.maxFP.get()), int(self.maxFP.get()), 100, int(self.numFlasks.get()), 
+                            int(self.flaskLevel.get()), weapons, filteredAshesOfWar, moreFilteredSpells, 
+                            moreFilteredUsables)
+        except:
+            messagebox.showinfo(title="Error", message="Please enter in valid Integers")
+            return
+        
         buffSel = BuffSelector(player)
 
-        print("Sorted:", buffSel.findBuffOrderByNumber())
+        print("Sorted:", buffSel.findBuffOrderByPrio())
 
     def button_callbck(self):
         print("Macro starts in 5 seconds...")
