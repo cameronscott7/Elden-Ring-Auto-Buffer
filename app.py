@@ -7,6 +7,7 @@ from Usable import Usable
 from Spell import Spell
 from Player import Player
 from Input import Input
+from BuffSelector import BuffSelector
 import tkinter.messagebox as messagebox
 
 
@@ -39,7 +40,7 @@ class App(customtkinter.CTk):
         self.row3Frame.grid(row=3, column=0, padx=20, pady=5, sticky="nsw")
 
         self.initializeBuffs()
-        self.loadBuffsFromFile(r"Elden-Ring-Auto-Buffer\Buffs.txt")
+        self.loadBuffsFromFile(r"Buffs.txt")
 
         self.createWeaponCombos(self.row1Frame)
         self.createUsableCombos(self.row2Frame)
@@ -296,7 +297,7 @@ class App(customtkinter.CTk):
                       self.spell10.get(), self.spell11.get(), self.spell12.get()]
         
         filteredWeapons = [item for item in weapons if item != "Empty"]
-        usablesWithoutEmpty = [item for item in usables if item != "Empty"]
+        filteredUsablesWithFlask = [item for item in usables if item != "Empty"]
         filteredUsables = [item for item in usables if item != "Empty" and item != "FP Flask" and item != "HP Flask"]
         filteredSpells = [item for item in spells if item != "Empty"]
         ashesOfWar = [item for item in weapons if item != "Staff"]
@@ -313,6 +314,7 @@ class App(customtkinter.CTk):
         filteredAshesOfWar = [self.ashesOfWarDict[key] for key in ashesOfWar if key in self.ashesOfWarDict]
         moreFilteredSpells = [self.spellsDict[key] for key in filteredSpells if key in self.spellsDict]
         moreFilteredUsables = [self.usablesDict[key] for key in filteredUsables if key in self.usablesDict]
+        filteredUsablesWithFlasks = [self.usablesDict[key] for key in filteredUsablesWithFlask if key in self.usablesDict]
 
         sorceries = [spell for spell in moreFilteredSpells if spell.isSorcery]
         incantations = [spell for spell in moreFilteredSpells if not spell.isSorcery]
@@ -345,13 +347,13 @@ class App(customtkinter.CTk):
 
         try:
             player = Player(int(self.maxFP.get()), int(self.maxFP.get()), 100, int(self.numFlasks.get()), 
-                            int(self.flaskLevel.get()), weapons, filteredAshesOfWar, moreFilteredSpells, 
+                            int(self.flaskLevel.get()), filteredWeapons, filteredAshesOfWar, moreFilteredSpells, 
                             moreFilteredUsables, numRightHandWeapons)
         except:
             messagebox.showinfo(title="Error", message="Please enter in valid Integers")
-            return
+            return   
 
-        input = Input(player, usablesWithoutEmpty)
+        input = Input(player, filteredUsablesWithFlasks)
         input.applyBuffs()
 
     def button_callbck(self):

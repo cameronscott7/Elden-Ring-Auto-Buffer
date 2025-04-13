@@ -9,7 +9,7 @@ Type: Usable
 Priority: 0
 FP: 0
 Buff Category: Flask
-BuffTime (Seconds): 130
+BuffTime (Seconds): 3
 
 Name: FP Flask
 Type: Usable
@@ -40,13 +40,6 @@ Buff Category: Body
 BuffTime (Seconds): 130
 isSorcery: True
 
-Name: Flame, Grant me Strength
-Type: Spell
-Priority: 2
-FP: 32
-Buff Category: Body
-BuffTime (Seconds): 60
-
 Name: Golden Vow (Ash of War)
 Type: Ash Of War
 Priority: 1
@@ -55,11 +48,12 @@ Buff Category: Aura
 BuffTime (Seconds): 3
 
 Name: Flame Grant me Strength
-Type: Ash Of War
+Type: Spell
 Priority: 2
 FP: 28
 Buff Category: Body
 BuffTime (Seconds): 3
+isSorcery: False
 
 Name: CragBlade
 Type: Ash Of War
