@@ -39,6 +39,7 @@ class App(customtkinter.CTk):
         self.row3Frame.grid(row=3, column=0, padx=20, pady=5, sticky="nsw")
 
         self.initializeBuffs()
+        self.loadBuffsFromFile(r"Elden-Ring-Auto-Buffer\Buffs.txt")
 
         self.createWeaponCombos(self.row1Frame)
         self.createUsableCombos(self.row2Frame)
@@ -47,21 +48,56 @@ class App(customtkinter.CTk):
 
     def initializeBuffs(self):
         self.weaponsDict = {
-            "Golden Vow (Ash of War)": Weapon("Golden Vow (Ash of War)", AshOfWar),
             "Staff": Weapon("Staff", "Medium"),
+            "Seal": Weapon("Seal", "Medium"),
         }
 
-        self.ashesOfWarDict = {
-            "Golden Vow (Ash of War)": AshOfWar("Golden Vow (Ash of War)", 0, 20, 10, "None", "Body", 0, 0.00, True, True),
-        }
+        self.ashesOfWarDict = {}
 
-        self.usablesDict = {
-            "Flask of Wondrous Physick": Usable("Flask of Wondrous Physick", 0, 0, 10, "None", "Aura", 0, 0.00, True),
-        }
+        self.usablesDict = {}
 
-        self.spellsDict = {
-            "Terra Magica": Spell("Flask of Wondrous Physick", 2, 50, 10, "None", "Area", 0, 0.00, True, True),
-        }
+        self.spellsDict = {}
+    
+    def loadBuffsFromFile(self, filepath):
+        with open(filepath, "r") as file:
+            lines = [line.strip() for line in file if line.strip() and not line.startswith("#")]
+
+        current_buff = {}
+        for line in lines:
+            if line.startswith("Name:"):
+                if current_buff:
+                    self.processBuff(current_buff)
+                    current_buff = {}
+                current_buff["Name"] = line.split("Name:")[1].strip()
+            else:
+                key, value = line.split(":", 1)
+                current_buff[key.strip()] = value.strip()
+
+        # Process last buff
+        if current_buff:
+            self.processBuff(current_buff)
+
+    def processBuff(self, buff_data):
+        name = buff_data["Name"]
+        type_ = buff_data["Type"].lower()
+
+        priority = int(buff_data["Priority"])
+        fp = int(buff_data["FP"])
+        category = buff_data["Buff Category"]
+        buff_time = int(buff_data["BuffTime (Seconds)"])
+        is_sorcery = buff_data.get("isSorcery", "False").lower() == "true"
+
+        if type_ == "usable":
+            self.usablesDict[name] = Usable(name, priority, fp, category, buff_time, True)
+        elif type_ == "spell":
+            self.spellsDict[name] = Spell(name, priority, fp, category, buff_time, is_sorcery)
+        elif "ash" in type_:
+            self.ashesOfWarDict[name] = AshOfWar(name, priority, fp, category, buff_time)
+            self.weaponsDict[name] = Weapon(name, AshOfWar)
+        else:
+            # Unknown type, ignore or log
+            print(f"Unknown type '{type_}' for buff '{name}'")
+
 
     def addLableEntry(self, parent, labelText):
         self.frame = customtkinter.CTkFrame(parent)
@@ -291,6 +327,11 @@ class App(customtkinter.CTk):
         if not (hasSeal):
             if (len(incantations) > 0):
                 messagebox.showinfo(title="Error", message="Must Equip Seal In Order To Use A Incantation")
+                return
+            
+        if int(self.numFlasks.get()) > 0:
+            if "FP Flask" not in usables:
+                messagebox.showinfo(title="Error", message="Must Equip FP Flask if Number of Flasks is Greater than 0.")
                 return
 
         try:

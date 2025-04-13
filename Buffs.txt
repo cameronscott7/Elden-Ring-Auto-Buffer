@@ -1,0 +1,62 @@
+# Buffs Document, Edit priorities to change buff order or update values as needed. 
+# (Lower Priorities are applied first)
+# Buff Categories are Weapon, Shield, Body, Aura, Health Regen, Stamina Regen, Fall Damage, Dodge Roll, 
+# Unique, Flask
+# For isSorcery, mark true if it is a Sorcery, false if it is an incantation.
+
+Name: Flask of Wondrous Physick
+Type: Usable
+Priority: 0
+FP: 0
+Buff Category: Flask
+BuffTime (Seconds): 130
+
+Name: FP Flask
+Type: Usable
+Priority: 99
+FP: 0
+Buff Category: Flask
+BuffTime (Seconds): 3
+
+Name: HP Flask
+Type: Usable
+Priority: 99
+FP: 0
+Buff Category: Flask
+BuffTime (Seconds): 3
+
+Name: Magic Grease
+Type: Usable
+Priority: 5
+FP: 0
+Buff Category: Weapon
+BuffTime (Seconds): 60
+
+Name: Terra Magica
+Type: Spell
+Priority: 3
+FP: 50
+Buff Category: Body
+BuffTime (Seconds): 130
+isSorcery: True
+
+Name: Flame, Grant me Strength
+Type: Spell
+Priority: 2
+FP: 32
+Buff Category: Body
+BuffTime (Seconds): 60
+
+Name: Golden Vow (Ash of War)
+Type: Ash Of War
+Priority: 1
+FP: 20
+Buff Category: Aura
+BuffTime (Seconds): 120
+
+Name: MoonLight GreatSword
+Type: Ash of War
+Priority: 5
+FP: 32
+Buff Category: Weapon
+BuffTime (Seconds): 60

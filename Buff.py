@@ -1,14 +1,10 @@
 class Buff:
-    def __init__(self, name="Placeholder", priority=99, FP=0, damage=0, damageType="None", buffType="None", statusBuildup=0,
-                 buffTime=0.00):
+    def __init__(self, name="Placeholder", priority=99, FP=0, buffType="None", buffTime=0.00):
         #Buff Types: Weapon, Shield, Body, Aura, Health Regen, Stamina Regen, Fall Damage, Dodge Roll, Unique
         self.name = name
         self.priority=priority
         self.FP = FP
-        self.damage = damage
-        self.damageType = damageType
         self.buffType = buffType
-        self.statusBuildup = statusBuildup
         self.buffTime = buffTime
     
     def getName(self):
@@ -20,17 +16,8 @@ class Buff:
     def getFP(self):
         return self.FP
 
-    def getDamage(self):
-        return self.damage
-
-    def getDamageType(self):
-        return self.damageType
-
     def getBuffType(self):
         return self.buffType
-
-    def getStatusBuildup(self):
-        return self.statusBuildup
     
     def getBuffTime(self):
         return self.buffTime

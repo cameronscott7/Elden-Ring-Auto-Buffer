@@ -11,7 +11,7 @@ class BuffSelector:
             for existing in unique_buffs:
                 if buff.getBuffType() == existing.getBuffType():
                     # Keep the one with the highest priority
-                    if buff.getPriority() > existing.getPriority():
+                    if buff.getPriority() < existing.getPriority():
                         unique_buffs.remove(existing)
                         unique_buffs.append(buff)
                     found = True
@@ -76,6 +76,7 @@ class BuffSelector:
                 if self.player.getNumFPFlasks() > 0:
                     self.player.setNumFPFlasks(self.player.getNumFPFlasks() - 1)
                     self.player.setFP(self.player.getFP() + self.player.getFPRestoreAmount())
+                    buffOrder.append("FP Flask")
                     # Don't increment i — retry this buff with the new FP
                 else:
                     # Can't use flask, move on

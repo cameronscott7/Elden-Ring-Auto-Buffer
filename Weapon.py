@@ -3,6 +3,8 @@ class Weapon:
         self.name = name
         self.kindOfBuff = kindOfBuff
 
+        #maybe add isOneHAnded and isRightHand here
+
     def kindOfBuff(self):
         return self.kindOfBuff
     
