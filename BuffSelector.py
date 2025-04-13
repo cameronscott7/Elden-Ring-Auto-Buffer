@@ -1,6 +1,7 @@
 class BuffSelector:
-    def __init__(self, player=None):
+    def __init__(self, player=None, fpFlask=None):
         self.player = player
+        self.fpFlask = fpFlask
     
     def removeDuplicates(self):
         buffs = self.player.getAshesOfWar() + self.player.getSpells() + self.player.getUsables()
@@ -76,7 +77,7 @@ class BuffSelector:
                 if self.player.getNumFPFlasks() > 0:
                     self.player.setNumFPFlasks(self.player.getNumFPFlasks() - 1)
                     self.player.setFP(self.player.getFP() + self.player.getFPRestoreAmount())
-                    buffOrder.append("FP Flask")
+                    buffOrder.append(self.fpFlask)
                     # Don't increment i — retry this buff with the new FP
                 else:
                     # Can't use flask, move on

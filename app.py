@@ -49,8 +49,10 @@ class App(customtkinter.CTk):
 
     def initializeBuffs(self):
         self.weaponsDict = {
+            "Empty": Weapon("Empty", "Empty"),
             "Staff": Weapon("Staff", "Medium"),
             "Seal": Weapon("Seal", "Medium"),
+            "Weapon": Weapon("Weapon", "Medium"),
         }
 
         self.ashesOfWarDict = {}
@@ -166,6 +168,7 @@ class App(customtkinter.CTk):
 
     def createUsableCombos(self, parent):
         buffNames = list(self.usablesDict.keys())
+        buffNames.insert( 0, "Empty")
 
         self.usableFrame = customtkinter.CTkFrame(parent)
         self.usableFrame.pack(padx=20, pady=20, anchor="w")
@@ -221,6 +224,7 @@ class App(customtkinter.CTk):
 
     def createSpellsCombos(self, parent):
         buffNames = list(self.spellsDict.keys())
+        buffNames.insert( 0, "Empty")
 
         self.spellFrame = customtkinter.CTkFrame(parent)
         self.spellFrame.pack(padx=20, pady=20)

@@ -49,7 +49,7 @@ BuffTime (Seconds): 3
 
 Name: Flame Grant me Strength
 Type: Spell
-Priority: 2
+Priority: 27
 FP: 28
 Buff Category: Body
 BuffTime (Seconds): 3
@@ -67,4 +67,52 @@ Type: Ash of War
 Priority: 5
 FP: 32
 Buff Category: Weapon
-BuffTime (Seconds): 60
+BuffTime (Seconds): 3
+
+Name: Blessing Of The ErdTree
+Type: Spell
+Priority: 6
+FP: 60
+Buff Category: Health Regen
+BuffTime (Seconds): 5
+isSorcery: False
+
+Name: Order's Blade
+Type: Spell
+Priority: 7
+FP: 22
+Buff Category: Weapon
+BuffTime (Seconds): 4
+isSorcery: False
+
+Name: Golden Vow (Spell)
+Type: Spell
+Priority: 8
+FP: 47
+Buff Category: Aura
+BuffTime (Seconds): 4
+isSorcery: False
+
+Name: Lord's Divine Fortification
+Type: Spell
+Priority: 9
+FP: 30
+Buff Category: Body
+BuffTime (Seconds): 3
+isSorcery: False
+
+Name: Greyoll's Roar
+Type: Spell
+Priority: 10
+FP: 50
+Buff Category: Power Shred Debuffs
+BuffTime (Seconds): 3
+isSorcery: False
+
+Name: Frozen Armament
+Type: Spell
+Priority: 10
+FP: 20
+Buff Category: Weapon
+BuffTime (Seconds): 3
+isSorcery: True

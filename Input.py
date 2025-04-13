@@ -17,7 +17,10 @@ class Input:
     def applyBuffs(self):
         print("Applying Buffs")
 
-        buffSel = BuffSelector(self.player)
+        fpFlaskIndex = next((i for i, obj in enumerate(self.usables) if obj.name == "FP Flask"), -1)
+        print("FP Flask Index:", fpFlaskIndex)
+
+        buffSel = BuffSelector(self.player, self.usables[fpFlaskIndex])
         buffOrder = buffSel.findBuffOrderByPrio()
 
         time.sleep(5)
@@ -38,7 +41,8 @@ class Input:
             if buff in self.player.getAshesOfWar():
                 index = self.player.getAshesOfWar().index(buff)
                 type = "AshOfWar"
-            elif buff in self.player.getUsables():
+            elif buff in self.usables:
+                print("Usables:", self.usables)
                 index = self.usables.index(buff)
                 type = "Usable"
             elif buff in self.player.getSpells():
@@ -67,22 +71,24 @@ class Input:
             self.applyUsables(buffIndex, buff)
         elif type == "Spell":
             if (buff.getIsSorcery()):
-                buffIndex = self.staffIndex
+                moveIndex = self.staffIndex
             else:
                 print("Seal Index:", self.sealIndex)
-                buffIndex = self.sealIndex
-            if buffIndex < self.player.getNumRightHandWeapons():
-                self.moveRightHand(buffIndex)
+                moveIndex = self.sealIndex
+            if moveIndex < self.player.getNumRightHandWeapons():
+                self.moveRightHand(moveIndex)
+                self.moveSpell(buffIndex)
                 self.applyRightSpell(buff)
             else:
-                self.moveLeftHand(buffIndex)
+                self.moveLeftHand(moveIndex)
+                self.moveSpell(buffIndex)
                 self.applyLeftSpell(buff)
 
     def moveLeftHand(self, buffIndex):
         while self.leftHandIndex != buffIndex:
             pydirectinput.press("left")
             time.sleep(0.5)
-            if (self.leftHandIndex < len(self.player.getWeapons())):
+            if (self.leftHandIndex < len(self.player.getWeapons()) - 1):
                 self.leftHandIndex += 1
             else: 
                 self.leftHandIndex = self.player.getNumRightHandWeapons()
@@ -102,14 +108,26 @@ class Input:
     #TODO
     #Need to check if if index goes above size of usables
     def applyUsables(self, buffIndex, buff):
-        pydirectinput.press("down")
-        time.sleep(0.1)
         while self.usablesIndex != buffIndex:
             pydirectinput.press("down")
             time.sleep(0.5)
-            self.usablesIndex += 1
+            if (self.usablesIndex < len(self.usables) - 1):
+                self.usablesIndex += 1
+            else:
+                self.usablesIndex = 0
         pydirectinput.press("r")
         time.sleep(buff.getBuffTime())
+    
+    def moveSpell(self, buffIndex):
+        print("Spell Index:", self.spellIndex)
+        print("Buff Index:", buffIndex)
+        while self.spellIndex != buffIndex:
+            pydirectinput.press("up")
+            time.sleep(0.5)
+            if (self.spellIndex < len(self.player.getSpells())- 1):
+                self.spellIndex += 1
+            else: 
+                self.spellIndex = 0
     
     def applyLeftHandAshOfWar(self, buff):
         pydirectinput.keyDown('e')
