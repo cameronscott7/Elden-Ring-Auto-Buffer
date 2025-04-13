@@ -3,12 +3,9 @@ import pydirectinput
 import time
 
 class Input:
-    def __init__(self, player=None, weapons=[], ashesOfWar=[], usables=[], spells=[]):
+    def __init__(self, player=None, usables=[]):
         self.player = player
-        self.weapons=weapons
-        self.ashesOfWar = ashesOfWar
         self.usables = usables
-        self.spells = spells
         self.leftHandIndex = 3
         self.rightHandIndex = 0
         self.usablesIndex = 0
@@ -17,8 +14,13 @@ class Input:
         self.sealIndex = 0
 
     def applyBuffs(self):
+        time.sleep(10)
+        print("Applying Buffs")
+
         buffSel = BuffSelector(self.player)
         buffOrder = buffSel.findBuffOrderByPrio()
+
+        print("Sorted:", buffSel.findBuffOrderByPrio())
 
         if len(self.player.getSpells()) > 0:
             hasSpell = True
@@ -30,19 +32,15 @@ class Input:
                 self.sealIndex = self.weapons.index("Seal")
 
         for buff in buffOrder:
-            if isinstance(buff, str):
-                name = buff
-            else:
-                name = buff.getName()
 
-            if name in self.ashesOfWar:
-                index = self.ashesOfWar.index(name)
+            if buff in self.player.getAshesOfWar():
+                index = self.player.getAshesOfWar().index(buff)
                 type = "AshOfWar"
-            elif name in self.usables:
-                index = self.usables.index(name)
+            elif buff in self.player.getUsables():
+                index = self.player.getUsables().index(buff)
                 type = "Usable"
-            elif name in self.spells:
-                index = self.spells.index(name)
+            elif buff in self.player.getSpells():
+                index = self.player.getSpells().index(buff)
                 type = "Spell"
             else:
                 index = -1
@@ -53,8 +51,8 @@ class Input:
 
     def inputBuff(self, buffIndex, buff, type):
         if type == "AshOfWar":
-            if buff.getName() in self.weapons:
-                buffIndex = self.weapons.index(buff)
+            if buff.getName() in self.player.getWeapons():
+                buffIndex = self.player.getWeapons().index(buff.getName())
             self.moveWeapon(buffIndex)
             self.applyAshOfWar(buff)
         elif type == "Usable":
@@ -68,7 +66,7 @@ class Input:
         print("Buffs Complete")    
     
     def moveWeapon(self, buffIndex):
-        if buffIndex < 3:
+        if buffIndex < self.player.getNumRightHandWeapons():
             self.moveLeftHand(buffIndex)
         else:
             self.moveRightHand(buffIndex)
@@ -96,12 +94,24 @@ class Input:
         time.sleep(buff.getBuffTime())
     
     def applyAshOfWar(self, buff):
+        pydirectinput.keyDown('e')
+        pydirectinput.mouseDown(button="right")
+        pydirectinput.mouseUp(button="right")
+        time.sleep(0.5)
+        pydirectinput.keyUp('e')
+        time.sleep(0.5)
         pydirectinput.keyDown('shift')
         time.sleep(.5)
         pydirectinput.mouseDown(button="right")
         pydirectinput.mouseUp(button="right")
         time.sleep(buff.getBuffTime())
         pydirectinput.keyUp('shift')
+        time.sleep(0.5)
+        pydirectinput.keyDown('e')
+        pydirectinput.mouseDown(button="left")
+        pydirectinput.mouseUp(button="left")
+        time.sleep(0.5)
+        pydirectinput.keyUp('e')
         time.sleep(0.5)
 
     def applySpell(self, buff):

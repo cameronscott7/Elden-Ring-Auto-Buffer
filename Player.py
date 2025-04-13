@@ -1,7 +1,7 @@
 class Player:
     #consider using hashmap instead of array
     def __init__(self, FP=0, maxFP=0, health=0, numFPFlasks=0, flaskLevel=0, weapons=[], ashesOfWar=[],
-                 spells=[], usables=[]):
+                 spells=[], usables=[], numRightHandWeapons=0):
         self.FP = FP
         self.maxFP = maxFP
         self.health = health
@@ -11,6 +11,7 @@ class Player:
         self.ashesOfWar = ashesOfWar
         self.spells = spells
         self.usables = usables
+        self.numRightHandWeapons=numRightHandWeapons
 
     def getFP(self):
         return self.FP
@@ -66,6 +67,9 @@ class Player:
     
     def getUsables(self):
         return self.usables
+    
+    def getNumRightHandWeapons(self):
+        return self.numRightHandWeapons
     
     def setFP(self, FP):
         if (FP < self.maxFP):

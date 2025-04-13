@@ -16,14 +16,14 @@ Type: Usable
 Priority: 99
 FP: 0
 Buff Category: Flask
-BuffTime (Seconds): 3
+BuffTime (Seconds): 2
 
 Name: HP Flask
 Type: Usable
 Priority: 99
 FP: 0
 Buff Category: Flask
-BuffTime (Seconds): 3
+BuffTime (Seconds): 2
 
 Name: Magic Grease
 Type: Usable
@@ -50,9 +50,23 @@ BuffTime (Seconds): 60
 Name: Golden Vow (Ash of War)
 Type: Ash Of War
 Priority: 1
-FP: 20
+FP: 40
 Buff Category: Aura
-BuffTime (Seconds): 120
+BuffTime (Seconds): 3
+
+Name: Flame Grant me Strength
+Type: Ash Of War
+Priority: 2
+FP: 28
+Buff Category: Body
+BuffTime (Seconds): 3
+
+Name: CragBlade
+Type: Ash Of War
+Priority: 3
+FP: 16
+Buff Category: Weapon
+BuffTime (Seconds): 3
 
 Name: MoonLight GreatSword
 Type: Ash of War

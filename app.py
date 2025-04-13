@@ -6,7 +6,7 @@ from AshOfWar import AshOfWar
 from Usable import Usable
 from Spell import Spell
 from Player import Player
-from BuffSelector import BuffSelector
+from Input import Input
 import tkinter.messagebox as messagebox
 
 
@@ -296,7 +296,8 @@ class App(customtkinter.CTk):
                       self.spell10.get(), self.spell11.get(), self.spell12.get()]
         
         filteredWeapons = [item for item in weapons if item != "Empty"]
-        filteredUsables = [item for item in usables if item != "Empty"]
+        usablesWithoutEmpty = [item for item in usables if item != "Empty"]
+        filteredUsables = [item for item in usables if item != "Empty" and item != "FP Flask" and item != "HP Flask"]
         filteredSpells = [item for item in spells if item != "Empty"]
         ashesOfWar = [item for item in weapons if item != "Staff"]
 
@@ -333,18 +334,25 @@ class App(customtkinter.CTk):
             if "FP Flask" not in usables:
                 messagebox.showinfo(title="Error", message="Must Equip FP Flask if Number of Flasks is Greater than 0.")
                 return
+            
+        numRightHandWeapons = 0
+        if self.weapon1.get() != "Empty":
+            numRightHandWeapons += 1
+        if self.weapon2.get() != "Empty":
+            numRightHandWeapons += 1
+        if self.weapon3.get() != "Empty":
+            numRightHandWeapons += 1
 
         try:
             player = Player(int(self.maxFP.get()), int(self.maxFP.get()), 100, int(self.numFlasks.get()), 
                             int(self.flaskLevel.get()), weapons, filteredAshesOfWar, moreFilteredSpells, 
-                            moreFilteredUsables)
+                            moreFilteredUsables, numRightHandWeapons)
         except:
             messagebox.showinfo(title="Error", message="Please enter in valid Integers")
             return
-        
-        buffSel = BuffSelector(player)
 
-        print("Sorted:", buffSel.findBuffOrderByPrio())
+        input = Input(player, usablesWithoutEmpty)
+        input.applyBuffs()
 
     def button_callbck(self):
         print("Macro starts in 5 seconds...")
