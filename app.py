@@ -1,5 +1,6 @@
 import customtkinter
 import pydirectinput
+import keyboard
 import time
 from Weapon import Weapon
 from AshOfWar import AshOfWar
@@ -7,7 +8,6 @@ from Usable import Usable
 from Spell import Spell
 from Player import Player
 from Input import Input
-from BuffSelector import BuffSelector
 import tkinter.messagebox as messagebox
 
 
@@ -46,6 +46,10 @@ class App(customtkinter.CTk):
         self.createUsableCombos(self.row2Frame)
         self.createSpellsCombos(self.row3Frame)
         self.createRightFrame(self.row1Frame)
+        keyboard.add_hotkey('F5', self.runOnF5)
+
+    def runOnF5(self, event=None):
+        self.submitAction()
 
     def initializeBuffs(self):
         self.weaponsDict = {
@@ -326,20 +330,24 @@ class App(customtkinter.CTk):
         print("Selections:", filteredWeapons)
         print("Selections:", filteredUsables)
 
-        if not (hasStaff):
-            if (len(sorceries) > 0):
-                messagebox.showinfo(title="Error", message="Must Equip Staff In Order To Use A Sorcery")
-                return
-            
-        if not (hasSeal):
-            if (len(incantations) > 0):
-                messagebox.showinfo(title="Error", message="Must Equip Seal In Order To Use A Incantation")
-                return
-            
-        if int(self.numFlasks.get()) > 0:
-            if "FP Flask" not in usables:
-                messagebox.showinfo(title="Error", message="Must Equip FP Flask if Number of Flasks is Greater than 0.")
-                return
+        try:
+            if not (hasStaff):
+                if (len(sorceries) > 0):
+                    messagebox.showinfo(title="Error", message="Must Equip Staff In Order To Use A Sorcery")
+                    return
+                
+            if not (hasSeal):
+                if (len(incantations) > 0):
+                    messagebox.showinfo(title="Error", message="Must Equip Seal In Order To Use A Incantation")
+                    return
+                
+            if int(self.numFlasks.get()) > 0:
+                if "FP Flask" not in usables:
+                    messagebox.showinfo(title="Error", message="Must Equip FP Flask if Number of Flasks is Greater than 0.")
+                    return
+        except:
+            messagebox.showinfo(title="Error", message="Please enter in valid Integers")
+            return   
             
         numRightHandWeapons = 0
         if self.weapon1.get() != "Empty":
